@@ -1,0 +1,13 @@
+<items gfxroot="gfx/items/" version="1">
+	<active
+	description="Throughout heaven and earth, I alone am the Honored One."
+	cache="damage speed shotspeed"
+	passivecache="true"
+	persistent="true"
+	gfx="infinite_void.png"
+	quality="4"
+	maxcharges="10"
+	initcharge="10"
+	id="1"
+	name="Infinite Void" />
+</items>

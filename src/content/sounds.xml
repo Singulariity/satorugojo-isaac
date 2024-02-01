@@ -1,0 +1,8 @@
+<sounds root="sounds/">
+	<sound name="Domain Expansion">
+		<sample weight="1" path="domain_expansion.wav" />
+	</sound>
+	<sound name="Gojo Birthright">
+		<sample weight="1" path="gojo_birthright.wav" />
+	</sound>
+</sounds>
