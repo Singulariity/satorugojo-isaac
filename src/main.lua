@@ -25,7 +25,7 @@ end
 ---@param image string
 local function showAnimation(image)
 	if GiantBookAPI then
-		GiantBookAPI.playGiantBook("Appear", image, Color(0.2, 0/5, 1, 0), Color(0, 0, 0, 1), Color(1, 1, 1, 1))
+		GiantBookAPI.playGiantBook("Appear", image, Color(0.2, 0/5, 1, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1))
 	end
 end
 
