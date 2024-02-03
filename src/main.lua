@@ -2,24 +2,22 @@ local json = require("json")
 
 GojoMod = RegisterMod("Satoru Gojo", 1)
 
-local DefaultData = {
-	["DomainActive"] = false,
-	["UseCounter"] = 0,
-	["BirthrightPickedUp"] = false
-}
-
-local ModData = {}
-
 SoundEffect.DOMAIN_EXPANSION = Isaac.GetSoundIdByName("Domain Expansion")
 SoundEffect.GOJO_BIRTHRIGHT = Isaac.GetSoundIdByName("Gojo Birthright")
 CollectibleType.INFINITE_VOID = Isaac.GetItemIdByName("Infinite Void")
+PlayerType.PLAYER_GOJO = Isaac.GetPlayerTypeByName("Gojo")
 
---TODO accurate stats in descriptions
----IED item descriptions
-if EID then
-	EID:addCollectible(CollectibleType.INFINITE_VOID, "↑ {{Damage}} +2 Damage#{{Blank}} {{Damage}} Bonus +0.2 per use#↑ {{Speed}} +0.3 Speed#↑ {{Shotspeed}} +0.2 Shot speed#When activated:#{{Blank}} \7 Vulnerable non-boss enemies will petrify for a moment when you enter a room for the current floor#{{Blank}} \7 Also petrifies bosses after 5 usages#{{TreasureRoomChanceSmall}} {{ColorSilver}}Throughout heaven and earth, I alone am the {{ColorRainbow}}Honored One{{ColorSilver}}.")
-end
+local DefaultData = {
+	["DomainActive"] = false, --is domain active
+	["UseCounter"] = 0, --infinite void use counter
+	["BirthrightPickedUp"] = false, --is birthright item picked up
+	["TransformationPickIDs"] = {} --table for storing picked up transformation item ids
+}
 
+local ModData = DefaultData
+
+
+--------------------------local functions start--------------------------
 
 
 ---@param image string
@@ -28,7 +26,6 @@ local function showAnimation(image)
 		GiantBookAPI.playGiantBook("Appear", image, Color(0.2, 0/5, 1, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1))
 	end
 end
-
 
 local function freezeAllEnemies()
 	local player = Isaac.GetPlayer(0)
@@ -41,10 +38,42 @@ local function freezeAllEnemies()
 			end
 		end
 	end
+end
 
+local function has_value(tab, val)
+    for _, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+    return false
+end
+
+local function table_length(tab)
+	local count = 0
+	for _ in pairs(tab) do count = count + 1 end
+	return count
 end
 
 
+--------------------------local functions end--------------------------
+
+
+--TODO
+---used for transformation item pickup tracking
+---@param player EntityPlayer
+function GojoMod:pEffectUpdate(player)
+	if player:HasCollectible(CollectibleType.INFINITE_VOID) and not has_value(ModData["TransformationPickIDs"], CollectibleType.INFINITE_VOID) then
+		print("infinite void picked up!")
+		table.insert(ModData["TransformationPickIDs"], CollectibleType.INFINITE_VOID)
+
+		GojoMod:updateEID()
+	end
+end
+GojoMod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, GojoMod.pEffectUpdate)
+
+
+---@param collectibleID CollectibleType
 ---@param player EntityPlayer
 function GojoMod:onUseInfiniteVoid(collectibleID, rngObj, player, useFlags, activeSlot, varData)
 	player:AnimateCollectible(CollectibleType.INFINITE_VOID, "UseItem", "PlayerPickup")
@@ -53,6 +82,11 @@ function GojoMod:onUseInfiniteVoid(collectibleID, rngObj, player, useFlags, acti
 	player:EvaluateItems()
 
 	freezeAllEnemies()
+
+	local item = Isaac.GetItemConfig():GetCollectible(collectibleID)
+	if item then
+		print(item.Tags)
+	end
 
 	SFXManager():Play(SoundEffect.DOMAIN_EXPANSION, 3)
 	showAnimation("blackhole.png")
@@ -101,12 +135,24 @@ end
 GojoMod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, GojoMod.onLevelChange)
 
 
---TODO idk
+--TODO accurate stats in descriptions
+---EID item descriptions
+function GojoMod:updateEID()
+	if not EID then return end
+
+	local transform_count = table_length(ModData["TransformationPickIDs"])
+	local transform_str = "{{Blank}} {{ColorTransform}} Sorcerer (" .. transform_count .. "/3)#"
+
+	EID:addCollectible(CollectibleType.INFINITE_VOID, transform_str .. "↑ {{Damage}} +2 Damage#{{Blank}} {{Damage}} Bonus +0.2 per use#↑ {{Speed}} +0.3 Speed#↑ {{Shotspeed}} +0.2 Shot speed#When activated:#{{Blank}} \7 Vulnerable non-boss enemies will petrify for a moment when you enter a room for the current floor#{{Blank}} \7 Also petrifies bosses after 5 usages")
+	EID:addBirthright(PlayerType.PLAYER_GOJO, "{{TreasureRoomChanceSmall}} {{ColorSilver}}Throughout heaven and earth, I alone am the {{ColorRainbow}}Honored One{{ColorSilver}}.")
+
+end
+
+
+--TODO
 ---@param player EntityPlayer
 function GojoMod:giveCostumeOnInit(player)
-	local gojoType = Isaac.GetPlayerTypeByName("Gojo", false)
-
-	if player:GetPlayerType() ~= gojoType then
+	if player:GetPlayerType() ~= PlayerType.PLAYER_GOJO then
 		return
 	end
 
@@ -126,11 +172,12 @@ function GojoMod:onGameStart(IsContinued)
 	if IsContinued and GojoMod:HasData() then
 		local data = json.decode(GojoMod:LoadData())
 
-		for i, v in pairs(data) do
+		for i, _ in pairs(data) do
             ModData[tostring(i)] = data[i]
         end
-
 	end
+
+	GojoMod:updateEID()
 end
 GojoMod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, GojoMod.onGameStart)
 
