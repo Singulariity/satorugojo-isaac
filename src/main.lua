@@ -18,6 +18,11 @@ end
 
 local ModData = DefaultData()
 
+--called after the mod isn completely ready/loaded
+local function postLoad()
+	GojoMod:updateEID()
+end
+
 
 --------------------------local functions start--------------------------
 
@@ -62,13 +67,20 @@ end
 
 
 --TODO
----used for transformation item pickup tracking
+---used for transformation or other item pickup tracking
 ---@param player EntityPlayer
 function GojoMod:pEffectUpdate(player)
 	if player:HasCollectible(CollectibleType.INFINITE_VOID) and not hasValue(ModData["TransformationPickIDs"], CollectibleType.INFINITE_VOID) then
 		table.insert(ModData["TransformationPickIDs"], CollectibleType.INFINITE_VOID)
 
 		GojoMod:updateEID()
+	end
+
+	--TODO add new image for birthright pickup
+	if not ModData["BirthrightPickedUp"] and player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+		ModData["BirthrightPickedUp"] = true
+		SFXManager():Play(SoundEffect.GOJO_BIRTHRIGHT)
+		showAnimation("blackhole.png")
 	end
 end
 GojoMod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, GojoMod.pEffectUpdate)
@@ -107,12 +119,6 @@ function GojoMod:onCache(player, cacheFlag)
 		player.ShotSpeed = player.ShotSpeed + 0.2
 	end
 
-	--TODO add new image for birthright pickup
-	if not ModData["BirthrightPickedUp"] and player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
-		ModData["BirthrightPickedUp"] = true
-		SFXManager():Play(SoundEffect.GOJO_BIRTHRIGHT)
-		showAnimation("blackhole.png")
-	end
 end
 GojoMod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, GojoMod.onCache)
 
@@ -183,4 +189,4 @@ function GojoMod:onGameExit(_)
 end
 GojoMod:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, GojoMod.onGameExit)
 
-GojoMod:updateEID()
+postLoad()
