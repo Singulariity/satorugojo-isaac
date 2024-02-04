@@ -18,7 +18,7 @@ end
 
 local ModData = DefaultData()
 
---called after the mod isn completely ready/loaded
+--called after the mod is completely ready/loaded
 local function postLoad()
 	GojoMod:updateEID()
 end
