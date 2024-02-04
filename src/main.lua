@@ -5,16 +5,18 @@ GojoMod = RegisterMod("Satoru Gojo", 1)
 SoundEffect.DOMAIN_EXPANSION = Isaac.GetSoundIdByName("Domain Expansion")
 SoundEffect.GOJO_BIRTHRIGHT = Isaac.GetSoundIdByName("Gojo Birthright")
 CollectibleType.INFINITE_VOID = Isaac.GetItemIdByName("Infinite Void")
-PlayerType.PLAYER_GOJO = Isaac.GetPlayerTypeByName("Gojo")
+PlayerType.PLAYER_GOJO = Isaac.GetPlayerTypeByName("Gojo", false)
 
-local DefaultData = {
-	["DomainActive"] = false, --is domain active
-	["UseCounter"] = 0, --infinite void use counter
-	["BirthrightPickedUp"] = false, --is birthright item picked up
-	["TransformationPickIDs"] = {} --table for storing picked up transformation item ids
-}
+local function DefaultData()
+	return {
+		["DomainActive"] = false, --is domain active
+		["UseCounter"] = 0, --infinite void use counter
+		["BirthrightPickedUp"] = false, --is birthright item picked up
+		["TransformationPickIDs"] = {} --table for storing picked up transformation item ids
+	}
+end
 
-local ModData = DefaultData
+local ModData = DefaultData()
 
 
 --------------------------local functions start--------------------------
@@ -40,16 +42,16 @@ local function freezeAllEnemies()
 	end
 end
 
-local function has_value(tab, val)
-    for _, value in ipairs(tab) do
-        if value == val then
-            return true
-        end
-    end
-    return false
+local function hasValue(tab, val)
+	for _, value in ipairs(tab) do
+		if value == val then
+			return true
+		end
+	end
+	return false
 end
 
-local function table_length(tab)
+local function tableLength(tab)
 	local count = 0
 	for _ in pairs(tab) do count = count + 1 end
 	return count
@@ -63,8 +65,7 @@ end
 ---used for transformation item pickup tracking
 ---@param player EntityPlayer
 function GojoMod:pEffectUpdate(player)
-	if player:HasCollectible(CollectibleType.INFINITE_VOID) and not has_value(ModData["TransformationPickIDs"], CollectibleType.INFINITE_VOID) then
-		print("infinite void picked up!")
+	if player:HasCollectible(CollectibleType.INFINITE_VOID) and not hasValue(ModData["TransformationPickIDs"], CollectibleType.INFINITE_VOID) then
 		table.insert(ModData["TransformationPickIDs"], CollectibleType.INFINITE_VOID)
 
 		GojoMod:updateEID()
@@ -76,17 +77,12 @@ GojoMod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, GojoMod.pEffectUpdate)
 ---@param collectibleID CollectibleType
 ---@param player EntityPlayer
 function GojoMod:onUseInfiniteVoid(collectibleID, rngObj, player, useFlags, activeSlot, varData)
-	player:AnimateCollectible(CollectibleType.INFINITE_VOID, "UseItem", "PlayerPickup")
+	player:AnimateCollectible(collectibleID, "UseItem", "PlayerPickup")
 	ModData["DomainActive"] = true
 	ModData["UseCounter"] = ModData["UseCounter"] + 1
 	player:EvaluateItems()
 
 	freezeAllEnemies()
-
-	local item = Isaac.GetItemConfig():GetCollectible(collectibleID)
-	if item then
-		print(item.Tags)
-	end
 
 	SFXManager():Play(SoundEffect.DOMAIN_EXPANSION, 3)
 	showAnimation("blackhole.png")
@@ -140,12 +136,11 @@ GojoMod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, GojoMod.onLevelChange)
 function GojoMod:updateEID()
 	if not EID then return end
 
-	local transform_count = table_length(ModData["TransformationPickIDs"])
+	local transform_count = tableLength(ModData["TransformationPickIDs"])
 	local transform_str = "{{Blank}} {{ColorTransform}} Sorcerer (" .. transform_count .. "/3)#"
 
-	EID:addCollectible(CollectibleType.INFINITE_VOID, transform_str .. "↑ {{Damage}} +2 Damage#{{Blank}} {{Damage}} Bonus +0.2 per use#↑ {{Speed}} +0.3 Speed#↑ {{Shotspeed}} +0.2 Shot speed#When activated:#{{Blank}} \7 Vulnerable non-boss enemies will petrify for a moment when you enter a room for the current floor#{{Blank}} \7 Also petrifies bosses after 5 usages")
-	EID:addBirthright(PlayerType.PLAYER_GOJO, "{{TreasureRoomChanceSmall}} {{ColorSilver}}Throughout heaven and earth, I alone am the {{ColorRainbow}}Honored One{{ColorSilver}}.")
-
+	EID:addCollectible(CollectibleType.INFINITE_VOID, transform_str .. "↑ {{Damage}} +2 Damage#{{Blank}} {{Damage}} Bonus +0.2 per use#↑ {{Speed}} +0.3 Speed#↑ {{Shotspeed}} +0.2 Shot speed#When activated:#{{Blank}} {{Timer}} Vulnerable non-boss enemies will petrify for a moment when you enter a room for the current floor#{{Blank}} \7 Also petrifies bosses after 5 usages")
+	--EID:addBirthright(PlayerType.PLAYER_GOJO, "{{TreasureRoomChanceSmall}} {{ColorSilver}}Throughout heaven and earth, I alone am the {{ColorRainbow}}Honored One{{ColorSilver}}.")
 end
 
 
@@ -167,14 +162,14 @@ GojoMod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, GojoMod.giveCostumeOnInit)
 ---when the run starts or continues
 ---@param IsContinued boolean value is true when you continue a run, false when you start a new one
 function GojoMod:onGameStart(IsContinued)
-	ModData = DefaultData
+	ModData = DefaultData()
 
 	if IsContinued and GojoMod:HasData() then
 		local data = json.decode(GojoMod:LoadData())
 
 		for i, _ in pairs(data) do
-            ModData[tostring(i)] = data[i]
-        end
+			ModData[tostring(i)] = data[i]
+		end
 	end
 
 	GojoMod:updateEID()
@@ -187,3 +182,5 @@ function GojoMod:onGameExit(_)
 	GojoMod:SaveData(json.encode(ModData))
 end
 GojoMod:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, GojoMod.onGameExit)
+
+GojoMod:updateEID()
