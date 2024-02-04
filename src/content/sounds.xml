@@ -5,4 +5,7 @@
 	<sound name="Gojo Birthright">
 		<sample weight="1" path="gojo_birthright.wav" />
 	</sound>
+	<sound name="Infinite Void">
+		<sample weight="1" path="infinite_void.wav" />
+	</sound>
 </sounds>
