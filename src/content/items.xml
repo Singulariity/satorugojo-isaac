@@ -6,8 +6,8 @@
 		persistent="true"
 		gfx="infinite_void.png"
 		quality="4"
-		maxcharges="7"
-		initcharge="7"
+		maxcharges="6"
+		initcharge="6"
 		id="1"
 		name="Infinite Void"
 	/>

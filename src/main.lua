@@ -10,6 +10,7 @@ PlayerType.PLAYER_GOJO = Isaac.GetPlayerTypeByName("Gojo", false)
 
 local function DefaultData()
 	return {
+		["DomainTrigger"] = -1, --domain trigger frame
 		["DomainActive"] = 0, --domain active for next x rooms
 		["UseCounter"] = 0, --infinite void use counter
 		["BirthrightPickedUp"] = false, --is birthright item picked up
@@ -27,7 +28,6 @@ end
 
 --------------------------local functions start--------------------------
 
-
 ---@param image string
 local function showAnimation(image)
 	if GiantBookAPI then
@@ -35,19 +35,24 @@ local function showAnimation(image)
 	end
 end
 
-local function freezeAllEnemies()
-	local player = Isaac.GetPlayer(0)
+local function triggerDomain()
+	ModData["DomainTrigger"] = 0
+end
+
+local function domainExpansion()
+	while Game():IsPaused() do end
+	local player = Isaac.GetPlayer()
 	local roomEntities = Isaac.GetRoomEntities()
 	for _, entity in ipairs(roomEntities) do
 		if entity:IsActiveEnemy() and entity:IsVulnerableEnemy() then
 			if not entity:IsBoss() or ModData["UseCounter"] >= 5 then
-				entity:AddFreeze(EntityRef(player), 90)
+				entity:AddFreeze(EntityRef(player), 100)
 			end
 		end
 	end
 
 	Game():ShakeScreen(30)
-	SFXManager():Play(SoundEffect.INFINITE_VOID)
+	SFXManager():Play(SoundEffect.INFINITE_VOID, 0.8)
 end
 
 local function hasValue(tab, val)
@@ -92,11 +97,11 @@ GojoMod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, GojoMod.pEffectUpdate)
 ---@param player EntityPlayer
 function GojoMod:onUseInfiniteVoid(collectibleID, rngObj, player, useFlags, activeSlot, varData)
 	player:AnimateCollectible(collectibleID, "UseItem", "PlayerPickup")
-	ModData["DomainActive"] = 3
+	ModData["DomainActive"] = 2
 	ModData["UseCounter"] = ModData["UseCounter"] + 1
 	player:EvaluateItems()
 
-	freezeAllEnemies()
+	domainExpansion()
 
 	SFXManager():Play(SoundEffect.DOMAIN_EXPANSION, 3)
 	showAnimation("blackhole.png")
@@ -114,7 +119,7 @@ function GojoMod:onCache(player, cacheFlag)
 	end
 
 	if cacheFlag == CacheFlag.CACHE_SPEED and player:HasCollectible(CollectibleType.INFINITE_VOID) then
-		player.MoveSpeed = player.MoveSpeed + 0.3
+		player.MoveSpeed = player.MoveSpeed + 0.15
 	end
 
 	if cacheFlag == CacheFlag.CACHE_SHOTSPEED and player:HasCollectible(CollectibleType.INFINITE_VOID) then
@@ -127,8 +132,7 @@ GojoMod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, GojoMod.onCache)
 
 function GojoMod:onRoomChange()
 	if ModData["DomainActive"] > 0 and not Game():GetRoom():IsClear() then
-		freezeAllEnemies()
-		ModData["DomainActive"] = ModData["DomainActive"] - 1
+		triggerDomain()
 	end
 end
 GojoMod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, GojoMod.onRoomChange)
@@ -136,6 +140,7 @@ GojoMod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, GojoMod.onRoomChange)
 
 function GojoMod:onLevelChange()
 	ModData["DomainActive"] = 0
+	ModData["DomainTrigger"] = -1
 end
 GojoMod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, GojoMod.onLevelChange)
 
@@ -147,7 +152,7 @@ function GojoMod:updateEID()
 	local transform_count = tableLength(ModData["TransformationPickIDs"])
 	local transform_str = "{{Blank}} {{ColorTransform}} Sorcerer (" .. transform_count .. "/3)#"
 
-	EID:addCollectible(CollectibleType.INFINITE_VOID, transform_str .. "↑ {{Damage}} +0.5 Damage#{{Blank}} {{Damage}} Bonus +0.2 per use (up to 10 times)#↑ {{Speed}} +0.3 Speed#↑ {{Shotspeed}} +0.2 Shot speed#When activated:#{{Blank}} {{Timer}} Vulnerable non-boss enemies will petrify for a moment when you enter a room for the next 3 rooms#{{Blank}} \7 Also petrifies bosses after 5 usages")
+	EID:addCollectible(CollectibleType.INFINITE_VOID, transform_str .. "↑ {{Damage}} +0.5 Damage#{{Blank}} {{Damage}} Bonus +0.2 per use (up to 10 times)#↑ {{Speed}} +0.15 Speed#↑ {{Shotspeed}} +0.2 Shot speed#When activated:#{{Blank}} {{Timer}} Vulnerable non-boss enemies will petrify for a moment when you enter a room for the next 2 rooms#{{Blank}} \7 Also petrifies bosses after 5 usages")
 	--EID:addBirthright(PlayerType.PLAYER_GOJO, "{{TreasureRoomChanceSmall}} {{ColorSilver}}Throughout heaven and earth, I alone am the {{ColorRainbow}}Honored One{{ColorSilver}}.")
 end
 
@@ -163,6 +168,25 @@ function GojoMod:giveCostumeOnInit(player)
 	player:AddNullCostume(hair)
 end
 GojoMod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, GojoMod.giveCostumeOnInit)
+
+
+function GojoMod:domainHandler()
+	if ModData["DomainActive"] == 0 or ModData["DomainTrigger"] < 0 then return	end
+
+	local start = ModData["DomainTrigger"]
+
+	if start >= 10 then
+		ModData["DomainTrigger"] = -1
+		ModData["DomainActive"] = ModData["DomainActive"] - 1
+		--local player = Isaac.GetPlayer()
+		--player:AnimateHappy()
+		domainExpansion()
+	else
+		ModData["DomainTrigger"] = ModData["DomainTrigger"] + 1
+	end
+
+end
+GojoMod:AddCallback(ModCallbacks.MC_POST_UPDATE, GojoMod.domainHandler)
 
 
 ---when the run starts or continues
@@ -181,9 +205,9 @@ function GojoMod:onGameStart(IsContinued)
 
 	--give starting item to gojo
 	if not IsContinued then
-		local player = Isaac.GetPlayer(0)
+		local player = Isaac.GetPlayer()
 		if player:GetPlayerType() == PlayerType.PLAYER_GOJO then
-			player:AddCollectible(CollectibleType.INFINITE_VOID, 4, true)
+			player:AddCollectible(CollectibleType.INFINITE_VOID, 3, true)
 		end
 	end
 
