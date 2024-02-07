@@ -7,6 +7,8 @@ SoundEffect.GOJO_BIRTHRIGHT = Isaac.GetSoundIdByName("Gojo Birthright")
 SoundEffect.INFINITE_VOID = Isaac.GetSoundIdByName("Infinite Void")
 CollectibleType.INFINITE_VOID = Isaac.GetItemIdByName("Infinite Void")
 PlayerType.PLAYER_GOJO = Isaac.GetPlayerTypeByName("Gojo", false)
+local GOJO_HAIR = Isaac.GetCostumeIdByPath("gfx/characters/gojo_hair.anm2")
+local lastFrame = nil
 
 local function DefaultData()
 	return {
@@ -70,6 +72,27 @@ local function tableLength(tab)
 	return count
 end
 
+---@param player EntityPlayer?
+local function giveCostume(player)
+	if not player then
+		player = Isaac.GetPlayer()
+	end
+
+	if player:GetPlayerType() == PlayerType.PLAYER_GOJO then
+		player:TryRemoveNullCostume(GOJO_HAIR)
+		player:AddNullCostume(GOJO_HAIR)
+	end
+end
+
+local function onceHandler()
+	if not lastFrame then
+		lastFrame = 0
+		return true
+	end
+
+	return false
+end
+
 
 --------------------------local functions end--------------------------
 
@@ -89,6 +112,7 @@ function GojoMod:pEffectUpdate(player)
 		SFXManager():Play(SoundEffect.GOJO_BIRTHRIGHT)
 		showAnimation("blackhole.png")
 	end
+
 end
 GojoMod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, GojoMod.pEffectUpdate)
 
@@ -159,18 +183,12 @@ end
 
 ---@param player EntityPlayer
 function GojoMod:giveCostumeOnInit(player)
-	if player:GetPlayerType() ~= PlayerType.PLAYER_GOJO then
-		return
-	end
-
-	local hair = Isaac.GetCostumeIdByPath("gfx/characters/gojo_hair.anm2")
-
-	player:AddNullCostume(hair)
+	giveCostume(player)
 end
 GojoMod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, GojoMod.giveCostumeOnInit)
 
 
-function GojoMod:domainHandler()
+function GojoMod:postUpdate()
 	if ModData["DomainActive"] == 0 or ModData["DomainTrigger"] < 0 then return	end
 
 	local start = ModData["DomainTrigger"]
@@ -185,8 +203,16 @@ function GojoMod:domainHandler()
 		ModData["DomainTrigger"] = ModData["DomainTrigger"] + 1
 	end
 
+	if lastFrame then
+		if lastFrame < 5 then
+			lastFrame = lastFrame + 1
+		else
+			lastFrame = nil
+		end
+	end
+
 end
-GojoMod:AddCallback(ModCallbacks.MC_POST_UPDATE, GojoMod.domainHandler)
+GojoMod:AddCallback(ModCallbacks.MC_POST_UPDATE, GojoMod.postUpdate)
 
 
 ---when the run starts or continues
