@@ -1,7 +1,7 @@
 <players root="gfx/characters/costumes/" portraitroot="gfx/ui/stage/" nameimageroot="gfx/ui/boss/">
 	<player name="Gojo" skin="character_gojo.png" nameimage="playername_gojo.png" portrait="playerportrait_gojo.png"
 		hp="2"
-		black="4"
+		armor="4"
 		coins="1"
 		bombs="1"
 		keys="1"
