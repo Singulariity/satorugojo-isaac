@@ -23,7 +23,7 @@ end
 function Utils:showAnimation(image)
 	if not GiantBookAPI then return end
 
-	GiantBookAPI.playGiantBook("Appear", image, Color(0.2, 0/5, 1, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1))
+	GiantBookAPI.playGiantBook("Shake", image, Color(0.2, 0/5, 1, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1))
 end
 
 return Utils

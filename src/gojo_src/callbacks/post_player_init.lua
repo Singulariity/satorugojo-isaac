@@ -4,6 +4,7 @@ local save = require("gojo_src.core.save_manager")
 ---@param player EntityPlayer
 local function MC_POST_PLAYER_INIT(_, player)
 	Gojo.postPlayerInit(player)
+
 	save.SaveManager.postPlayerInit(player)
 end
 

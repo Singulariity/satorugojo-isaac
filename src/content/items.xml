@@ -11,4 +11,11 @@
 		id="1"
 		name="Infinite Void"
 	/>
+	<passive
+		description="Can they reach you?"
+		cache="all"
+		gfx="limit.png"
+		quality="3"
+		id="2"
+		name="Limit" />
 </items>

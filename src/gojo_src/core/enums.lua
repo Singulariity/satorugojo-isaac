@@ -11,7 +11,8 @@ ENUMS.SOUNDS = {
 }
 
 ENUMS.ITEMS = {
-	INFINITE_VOID = Isaac.GetItemIdByName("Infinite Void")
+	INFINITE_VOID = Isaac.GetItemIdByName("Infinite Void"),
+	LIMIT = Isaac.GetItemIdByName("Limit")
 }
 
 ENUMS.COSTUMES = {

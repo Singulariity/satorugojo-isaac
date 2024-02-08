@@ -25,16 +25,16 @@ end
 ---@param player EntityPlayer
 function SaveManager.postPlayerInit(player)
 	local continue = Game():GetFrameCount() ~= 0
-	local data
+	local _data
 
 	if continue and Isaac.HasModData(modRef) then
-		data = json.decode(modRef:LoadData())
+		_data = json.decode(modRef:LoadData())
 	else
-		data = DefaultData()
+		_data = DefaultData()
 	end
 
-	for i, _ in pairs(data) do
-		Data[tostring(i)] = data[i]
+	for i, _ in pairs(_data) do
+		Data[tostring(i)] = _data[i]
 	end
 end
 
