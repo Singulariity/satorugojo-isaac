@@ -1,4 +1,5 @@
 local json = require("json")
+local Utils = require("gojo_src.utils")
 
 local function DefaultData()
 	return {
@@ -6,7 +7,14 @@ local function DefaultData()
 		DomainActive = 0, --domain active for next x rooms
 		UseCounter = 0, --infinite void use counter
 		Birthright = false, --is birthright item picked up
-		TransformationPickIDs = {} --table for storing picked up transformation item ids
+		TransformationPickIDs = {}, --table for storing picked up transformation item ids
+		--permanent data does not reset with each run
+		PermanentData = {
+			Unlocks = {
+				InfiniteVoid = false,
+				Limit = false
+			}
+		}
 	}
 end
 
@@ -27,10 +35,20 @@ function SaveManager.postPlayerInit(player)
 	local continue = Game():GetFrameCount() ~= 0
 	local _data
 
-	if continue and Isaac.HasModData(modRef) then
-		_data = json.decode(modRef:LoadData())
+	if Isaac.HasModData(modRef) then
+		local saved_data = json.decode(modRef:LoadData())
+
+		if continue then
+			_data = saved_data
+		else
+			_data = Utils:copyTable(DefaultData())
+
+			for i, _ in pairs(saved_data.PermanentData) do
+				_data.PermanentData[tostring(i)] = saved_data.PermanentData[i]
+			end
+		end
 	else
-		_data = DefaultData()
+		_data = Utils:copyTable(DefaultData())
 	end
 
 	for i, _ in pairs(_data) do

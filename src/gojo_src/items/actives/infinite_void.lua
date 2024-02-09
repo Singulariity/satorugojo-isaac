@@ -1,6 +1,5 @@
 local save = require("gojo_src.core.save_manager")
 local enums = require("gojo_src.core.enums")
-local eid = require("gojo_src.mods.eid")
 local Utils = require("gojo_src.utils")
 
 local InfiniteVoid = {}

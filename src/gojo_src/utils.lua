@@ -19,11 +19,37 @@ function Utils:tableLength(tab)
 	return count
 end
 
+---image should be in `gfx/ui/giantbook/` folder
 ---@param image string
 function Utils:showAnimation(image)
 	if not GiantBookAPI then return end
 
 	GiantBookAPI.playGiantBook("Shake", image, Color(0.2, 0/5, 1, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1))
+end
+
+---image should be in `gfx/ui/achievements/` folder
+---@param image string
+function Utils:ShowAchievement(image)
+	if not GiantBookAPI then return end
+
+	GiantBookAPI.ShowAchievement(image)
+end
+
+---@param tab table
+function Utils:copyTable(tab)
+	local newTable = {}
+
+	for i, _ in pairs(tab) do
+		local value
+		if type(tab[i]) == "table" then
+			value = Utils:copyTable(tab[i])
+		else
+			value = tab[i]
+		end
+		newTable[tostring(i)] = value
+	end
+
+	return newTable
 end
 
 return Utils
