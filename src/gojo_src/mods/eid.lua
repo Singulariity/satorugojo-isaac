@@ -26,8 +26,8 @@ function EID_LOCAL:UpdateEID()
 	local transform_count = Utils:tableLength(save.Data.TransformationPickIDs)
 	local transform_str = "{{Blank}} {{ColorTransform}} Sorcerer (" .. math.min(transform_count, 3) .. "/3)#"
 
-	EID:addCollectible(enums.ITEMS.INFINITE_VOID, transform_str .. "↑ {{Damage}} +0.5 Damage#{{Blank}} {{Damage}} Bonus +0.2 per use (up to 10 times)#↑ {{Speed}} +0.15 Speed#↑ {{Shotspeed}} +0.2 Shot speed#When activated:#{{Blank}} {{Timer}} Vulnerable non-boss enemies will petrify for a while when you enter a room for the next 2 rooms#{{Blank}} \7 Also petrifies bosses after 5 usages")
-	EID:addCollectible(enums.ITEMS.LIMIT, transform_str .. "Blood tears won't reach you")
+	EID:addCollectible(enums.ITEMS.INFINITE_VOID.ID, transform_str .. "↑ {{Damage}} +0.5 Damage#{{Blank}} {{Damage}} Bonus +0.2 per use (up to 10 times)#↑ {{Speed}} +0.15 Speed#↑ {{Shotspeed}} +0.2 Shot speed#When activated:#{{Blank}} {{Timer}} Vulnerable non-boss enemies will petrify for a while when you enter a room for the next 2 rooms#{{Blank}} \7 Also petrifies bosses after 5 usages")
+	EID:addCollectible(enums.ITEMS.LIMIT.ID, transform_str .. "Slows down near enemy projectiles")
 	EID:addBirthright(enums.PLAYERS.GOJO, "{{TreasureRoomChanceSmall}} {{ColorSilver}}Throughout heaven and earth, I alone am the {{ColorRainbow}}Honored One{{ColorSilver}}.")
 end
 

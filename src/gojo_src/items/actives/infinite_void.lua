@@ -29,7 +29,7 @@ end
 ---@param collectibleID CollectibleType
 ---@param player EntityPlayer
 function InfiniteVoid.useItem(collectibleID, rngObj, player, useFlags, activeSlot, varData)
-	if collectibleID ~= enums.ITEMS.INFINITE_VOID then return end
+	if collectibleID ~= enums.ITEMS.INFINITE_VOID.ID then return end
 
 	player:AnimateCollectible(collectibleID, "UseItem", "PlayerPickup")
 	save.Data.DomainActive = 2
@@ -39,7 +39,7 @@ function InfiniteVoid.useItem(collectibleID, rngObj, player, useFlags, activeSlo
 	domainExpansion()
 
 	SFXManager():Play(enums.SOUNDS.DOMAIN_EXPANSION, 3)
-	Utils:showAnimation("blackhole.png")
+	Utils:showAnimation("infinite_void.png")
 end
 
 function InfiniteVoid.postUpdate()
@@ -59,9 +59,15 @@ function InfiniteVoid.postUpdate()
 end
 
 function InfiniteVoid.postNewRoom()
-	if save.Data.DomainActive > 0 and not Game():GetRoom():IsClear() then
-		triggerDomain()
+	if save.Data.DomainActive <= 0 or Game():GetRoom():IsClear() then return end
+
+	for _, entity in ipairs(Isaac.GetRoomEntities()) do
+		if entity:IsActiveEnemy() then
+			triggerDomain()
+			return
+		end
 	end
+
 end
 
 function InfiniteVoid.postNewLevel()
@@ -73,20 +79,20 @@ end
 ---@param cacheFlag CacheFlag
 function InfiniteVoid.evaluateCache(player, cacheFlag)
 
-	if cacheFlag == CacheFlag.CACHE_DAMAGE and player:HasCollectible(enums.ITEMS.INFINITE_VOID) then
+	if cacheFlag == CacheFlag.CACHE_DAMAGE and player:HasCollectible(enums.ITEMS.INFINITE_VOID.ID) then
 		player.Damage = player.Damage + 0.5 + (0.2 * math.min(save.Data.UseCounter, 10))
 	end
 
-	if cacheFlag == CacheFlag.CACHE_SPEED and player:HasCollectible(enums.ITEMS.INFINITE_VOID) then
+	if cacheFlag == CacheFlag.CACHE_SPEED and player:HasCollectible(enums.ITEMS.INFINITE_VOID.ID) then
 		player.MoveSpeed = math.min(player.MoveSpeed + 0.15, 2)
 	end
 
-	if cacheFlag == CacheFlag.CACHE_SHOTSPEED and player:HasCollectible(enums.ITEMS.INFINITE_VOID) then
+	if cacheFlag == CacheFlag.CACHE_SHOTSPEED and player:HasCollectible(enums.ITEMS.INFINITE_VOID.ID) then
 		player.ShotSpeed = player.ShotSpeed + 0.2
 	end
 
-	if player:HasCollectible(enums.ITEMS.INFINITE_VOID) and not Utils:hasValue(save.Data.TransformationPickIDs, enums.ITEMS.INFINITE_VOID) then
-		table.insert(save.Data.TransformationPickIDs, enums.ITEMS.INFINITE_VOID)
+	if player:HasCollectible(enums.ITEMS.INFINITE_VOID.ID) and not Utils:hasValue(save.Data.TransformationPickIDs, enums.ITEMS.INFINITE_VOID.ID) then
+		table.insert(save.Data.TransformationPickIDs, enums.ITEMS.INFINITE_VOID.ID)
 	end
 end
 

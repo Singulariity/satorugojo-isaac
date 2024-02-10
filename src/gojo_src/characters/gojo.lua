@@ -20,7 +20,7 @@ function Gojo.postPlayerInit(player)
 	local continue = Game():GetFrameCount() ~= 0
 
 	if not continue then
-		player:AddCollectible(enums.ITEMS.INFINITE_VOID, 4, true)
+		player:AddCollectible(enums.ITEMS.INFINITE_VOID.ID, 4, true)
 	end
 end
 

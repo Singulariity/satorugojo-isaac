@@ -6,7 +6,7 @@ local Limit = {}
 
 ---@param player EntityPlayer
 function Limit.postPEffectUpdate(player)
-	if not player:HasCollectible(enums.ITEMS.LIMIT) then return end
+	if not player:HasCollectible(enums.ITEMS.LIMIT.ID) then return end
 
 	for _, entity in ipairs(Isaac.GetRoomEntities()) do
 		if entity.Type == EntityType.ENTITY_PROJECTILE then
@@ -27,8 +27,8 @@ end
 ---@param player EntityPlayer
 ---@param cacheFlag CacheFlag
 function Limit.evaluateCache(player, cacheFlag)
-	if player:HasCollectible(enums.ITEMS.LIMIT) and not Utils:hasValue(save.Data.TransformationPickIDs, enums.ITEMS.LIMIT) then
-		table.insert(save.Data.TransformationPickIDs, enums.ITEMS.LIMIT)
+	if player:HasCollectible(enums.ITEMS.LIMIT.ID) and not Utils:hasValue(save.Data.TransformationPickIDs, enums.ITEMS.LIMIT.ID) then
+		table.insert(save.Data.TransformationPickIDs, enums.ITEMS.LIMIT.ID)
 	end
 end
 

@@ -1,6 +1,6 @@
 <items gfxroot="gfx/items/" version="1">
 	<active
-		description="Throughout heaven and earth, I alone am the Honored One."
+		description="Muryokusho"
 		cache="damage speed shotspeed"
 		passivecache="true"
 		persistent="true"
@@ -15,7 +15,7 @@
 		description="Can they reach you?"
 		cache="all"
 		gfx="limit.png"
-		quality="3"
+		quality="4"
 		id="2"
 		name="Limit" />
 </items>

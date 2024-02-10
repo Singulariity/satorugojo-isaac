@@ -10,10 +10,7 @@ local function DefaultData()
 		TransformationPickIDs = {}, --table for storing picked up transformation item ids
 		--permanent data does not reset with each run
 		PermanentData = {
-			Unlocks = {
-				InfiniteVoid = false,
-				Limit = false
-			}
+			Unlocks = {}
 		}
 	}
 end
