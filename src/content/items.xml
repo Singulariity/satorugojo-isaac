@@ -12,7 +12,7 @@
 		name="Infinite Void"
 	/>
 	<passive
-		description="Can they reach you?"
+		description="They can't reach you"
 		cache="all"
 		gfx="limit.png"
 		quality="4"

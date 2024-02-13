@@ -201,9 +201,20 @@ function Manager.postUpdate()
 	end
 end
 
+---@param player EntityPlayer
+function Manager.postPlayerInit(player)
+	for i, _ in pairs(enums.ITEMS) do
+		local item = enums.ITEMS[i]
+		if not Manager:isUnlocked(item.ID) then
+			Game():GetItemPool():RemoveCollectible(item.ID)
+		end
+	end
+end
 
+--currently unused
 ---@param pickup EntityPickup
 function Manager.postPickupInit(pickup)
+	if true then return end
 	if pickup.Variant ~= PickupVariant.PICKUP_COLLECTIBLE then return end
 
 	local item = enums:getItemById(pickup.SubType)
