@@ -1,19 +1,28 @@
 local ENUMS = {}
 
 ---@param name string item name from `items.xml`
+---@param character GojoPlayer Item belongs to
+---@param completion Completion unlock after completion.
+---@param hard boolean is hard mode completion
 ---@param achievement string achievement image
----@param unlockBoss EntityType unlocks the item after defeating this boss
----@param unlockedByDefault boolean? is the item unlocked by default? default: `false`
-local function Item(name, achievement, unlockBoss, unlockedByDefault)
+local function Item(name, character, completion, hard, achievement)
 	local table = {}
 
 	table.Name = name
 	table.ID = Isaac.GetItemIdByName(name)
+	table.Character = character
+	table.Completion = completion
+	table.Hard = hard
 	table.Achievement = achievement
-	table.UnlockBoss = unlockBoss
-	table.UnlockedDefault = unlockedByDefault
 
 	return table
+end
+
+---This item will be unlocked by default
+---@param name string item name from `items.xml`
+local function DefaultItem(name)
+	---@diagnostic disable-next-line: param-type-mismatch
+	return Item(name, nil, nil, nil, nil)
 end
 
 ---@param name string
@@ -36,6 +45,24 @@ function ENUMS:getItemById(id)
 	return nil
 end
 
+---@enum Completion
+ENUMS.COMPLETION = {
+	MomsHeart = "MomsHeart",
+	Isaac = "Isaac",
+	Satan = "Satan",
+	BlueBaby = "BlueBaby",
+	Lamb = "Lamb",
+	BossRush = "BossRush",
+	Hush = "Hush",
+	MegaSatan = "MegaSatan",
+	Delirium = "Delirium",
+	Mother = "Mother",
+	Beast = "Beast",
+	GreedMode = "GreedMode",
+	FullCompletion = "FullCompletion"
+}
+
+---@enum GojoPlayer
 ENUMS.PLAYERS = {
 	GOJO = Isaac.GetPlayerTypeByName("Gojo", false)
 }
@@ -46,10 +73,9 @@ ENUMS.SOUNDS = {
 	INFINITE_VOID = Isaac.GetSoundIdByName("Infinite Void")
 }
 
---fix remove defaults
 ENUMS.ITEMS = {
-	INFINITE_VOID = Item("Infinite Void", "achievement_infinite_void.png", EntityType.ENTITY_DELIRIUM, true),
-	LIMIT = Item("Limit", "achievement_limit.png", EntityType.ENTITY_MOMS_HEART, true)
+	INFINITE_VOID = Item("Infinite Void", ENUMS.PLAYERS.GOJO, ENUMS.COMPLETION.Delirium, false, "achievement_infinite_void.png"),
+	LIMIT = Item("Limit", ENUMS.PLAYERS.GOJO, ENUMS.COMPLETION.MomsHeart, false, "achievement_limit.png")
 }
 
 ENUMS.COSTUMES = {

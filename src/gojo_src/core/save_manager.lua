@@ -1,5 +1,24 @@
 local json = require("json")
 local Utils = require("gojo_src.utils")
+local enums = require("gojo_src.core.enums")
+
+local function CompletionTemplate()
+	return {
+		[enums.COMPLETION.MomsHeart] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.Isaac] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.Satan] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.BlueBaby] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.Lamb] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.BossRush] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.Hush] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.MegaSatan] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.Delirium] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.Mother] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.Beast] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.GreedMode] = { Unlock = false, Hard = false },
+		[enums.COMPLETION.FullCompletion] = { Unlock = false, Hard = false },
+	}
+end
 
 local function DefaultData()
 	return {
@@ -10,7 +29,10 @@ local function DefaultData()
 		TransformationPickIDs = {}, --table for storing picked up transformation item ids
 		--permanent data does not reset with each run
 		PermanentData = {
-			Unlocks = {}
+			Unlocks = {
+				--default gojo achievement data
+				[enums.PLAYERS.GOJO] = CompletionTemplate()
+			}
 		}
 	}
 end
