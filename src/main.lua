@@ -28,8 +28,8 @@ GojoMod:AddCallback(ModCallbacks.MC_USE_ITEM, useItem)
 
 --other
 include("gojo_src.mods.pause_screen_completion_marks_api")
-PauseScreenCompletionMarksAPI:AddModCharacterCallback(enums.PLAYERS.GOJO, function()
-	return save.Data.PermanentData.Unlocks[tostring(enums.PLAYERS.GOJO)]
+PauseScreenCompletionMarksAPI:AddModCharacterCallback(enums.PLAYERS.GOJO.ID, function()
+	return save.Data.PermanentData.Unlocks[enums.PLAYERS.GOJO.Name]
 end)
 local eid = require("gojo_src.mods.eid")
 eid:UpdateEID()

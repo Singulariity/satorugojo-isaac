@@ -17,7 +17,7 @@ function Manager:isUnlocked(id)
 	if not item then return false end
 
 	if item.Completion then
-		local tab = save.Data.PermanentData.Unlocks[tostring(item.Character)][item.Completion]
+		local tab = save.Data.PermanentData.Unlocks[item.Character.Name][item.Completion]
 		if item.Hard then
 			return tab.Hard
 		else
@@ -34,7 +34,11 @@ local function UpdateCompletion(completion, difficulty)
 
 	for p = 0, Game():GetNumPlayers() - 1 do
 		local playerType = Isaac.GetPlayer(p):GetPlayerType()
-		local tab = save.Data.PermanentData.Unlocks[tostring(playerType)]
+		local gojoPlayer = enums:getPlayerById(playerType)
+
+		if not gojoPlayer then goto continue end
+
+		local tab = save.Data.PermanentData.Unlocks[gojoPlayer.Name]
 
 		if not tab then goto continue end
 

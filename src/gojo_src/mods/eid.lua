@@ -18,7 +18,7 @@ local once = require("gojo_src.core.once_manager")
 local function setIcons()
 	local icons = Sprite()
 	icons:Load("gfx/eid_player_icons.anm2", true)
-	EID:addIcon("Player" .. enums.PLAYERS.GOJO, "Players", 0, 32, 32, 0, 0, icons)
+	EID:addIcon("Player" .. enums.PLAYERS.GOJO.ID, "Players", 0, 32, 32, 0, 0, icons)
 end
 setIcons()
 
@@ -28,7 +28,7 @@ function EID_LOCAL:UpdateEID()
 
 	EID:addCollectible(enums.ITEMS.INFINITE_VOID.ID, transform_str .. "↑ {{Damage}} +0.5 Damage#{{Blank}} {{Damage}} Bonus +0.2 per use (up to 10 times)#↑ {{Speed}} +0.15 Speed#↑ {{Shotspeed}} +0.2 Shot speed#When activated:#{{Blank}} {{Timer}} Vulnerable non-boss enemies will petrify for a while when you enter a room for the next 2 rooms#{{Blank}} \7 Also petrifies bosses after 5 usages")
 	EID:addCollectible(enums.ITEMS.LIMIT.ID, transform_str .. "Slows down near enemy projectiles")
-	EID:addBirthright(enums.PLAYERS.GOJO, "{{TreasureRoomChanceSmall}} {{ColorSilver}}Throughout heaven and earth, I alone am the {{ColorRainbow}}Honored One{{ColorSilver}}.")
+	EID:addBirthright(enums.PLAYERS.GOJO.ID, "{{TreasureRoomChanceSmall}} {{ColorSilver}}Throughout heaven and earth, I alone am the {{ColorRainbow}}Honored One{{ColorSilver}}.")
 end
 
 ---@param player EntityPlayer

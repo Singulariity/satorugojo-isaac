@@ -31,7 +31,7 @@ local function DefaultData()
 		PermanentData = {
 			Unlocks = {
 				--default gojo achievement data
-				[tostring(enums.PLAYERS.GOJO)] = CompletionTemplate()
+				[enums.PLAYERS.GOJO.Name] = CompletionTemplate()
 			}
 		}
 	}
@@ -62,16 +62,16 @@ function SaveManager.postPlayerInit(player)
 		else
 			_data = Utils:copyTable(DefaultData())
 
-			for i, _ in pairs(saved_data.PermanentData) do
-				_data.PermanentData[tostring(i)] = saved_data.PermanentData[i]
+			for k, v in pairs(saved_data.PermanentData) do
+				_data.PermanentData[tostring(k)] = v
 			end
 		end
 	else
 		_data = Utils:copyTable(DefaultData())
 	end
 
-	for i, _ in pairs(_data) do
-		Data[tostring(i)] = _data[i]
+	for k, v in pairs(_data) do
+		Data[tostring(k)] = v
 	end
 end
 

@@ -13,7 +13,7 @@ end
 
 ---@param player EntityPlayer
 function Gojo.postPlayerInit(player)
-	if player:GetPlayerType() ~= enums.PLAYERS.GOJO then return end
+	if player:GetPlayerType() ~= enums.PLAYERS.GOJO.ID then return end
 
 	Gojo:giveNullCostume(player)
 
@@ -27,7 +27,7 @@ end
 ---@param player EntityPlayer
 ---@param cacheFlag CacheFlag
 function Gojo.evaluateCache(player, cacheFlag)
-	if player:GetPlayerType() ~= enums.PLAYERS.GOJO then return end
+	if player:GetPlayerType() ~= enums.PLAYERS.GOJO.ID then return end
 
 	--when the player picks up "Missing No." item, the null costume disappears
 	--hacky way to fix it but anyways ;D

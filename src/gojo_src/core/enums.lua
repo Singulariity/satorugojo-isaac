@@ -1,5 +1,26 @@
 local ENUMS = {}
 
+---@param name string player name from `players.xml`
+---@param tainted boolean
+local function Character(name, tainted)
+	local table = {}
+
+	table.Name = name
+	table.ID = Isaac.GetPlayerTypeByName(name, tainted)
+
+	return table
+end
+
+---@param id PlayerType
+function ENUMS:getPlayerById(id)
+	for i, _ in pairs(ENUMS.PLAYERS) do
+		if ENUMS.PLAYERS[i].ID == id then
+			return ENUMS.PLAYERS[i]
+		end
+	end
+	return nil
+end
+
 ---@param name string item name from `items.xml`
 ---@param character GojoPlayer Item belongs to
 ---@param completion Completion unlock after completion.
@@ -64,7 +85,7 @@ ENUMS.COMPLETION = {
 
 ---@enum GojoPlayer
 ENUMS.PLAYERS = {
-	GOJO = Isaac.GetPlayerTypeByName("Gojo", false)
+	GOJO = Character("Gojo", false)
 }
 
 ENUMS.SOUNDS = {
