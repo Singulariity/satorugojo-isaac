@@ -31,7 +31,7 @@ local function DefaultData()
 		PermanentData = {
 			Unlocks = {
 				--default gojo achievement data
-				[enums.PLAYERS.GOJO] = CompletionTemplate()
+				[tostring(enums.PLAYERS.GOJO)] = CompletionTemplate()
 			}
 		}
 	}

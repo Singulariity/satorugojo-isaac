@@ -16,7 +16,7 @@ local function domainExpansion()
 			entity:Die()
 		elseif entity:IsActiveEnemy() and entity:IsVulnerableEnemy() then
 			if not entity:IsBoss() or save.Data.UseCounter >= 5 then
-				entity:AddFreeze(EntityRef(player), 130)
+				entity:AddFreeze(EntityRef(player), 140)
 			end
 		end
 	end

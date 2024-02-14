@@ -41,10 +41,12 @@ local function UpdateCompletion(completion, difficulty)
 		local newUnlock = false
 
 		if not tab[completion].Unlock then
+			Isaac.DebugString("Gojo - Completed: " .. completion)
 			tab[completion].Unlock = true
 			newUnlock = true
 		end
 		if hard and not tab[completion].Hard then
+			Isaac.DebugString("Gojo - Completed (Hard): " .. completion)
 			tab[completion].Hard = true
 			newUnlock = true
 		end

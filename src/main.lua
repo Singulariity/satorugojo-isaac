@@ -34,7 +34,20 @@ end)
 local eid = require("gojo_src.mods.eid")
 eid:UpdateEID()
 
+
 --test
+local function Dump(o)
+	if type(o) == 'table' then
+		local s = '{ '
+		for k,v in pairs(o) do
+			if type(k) ~= 'number' then k = '"'..k..'"' end
+			s = s .. '['..k..'] = ' .. Dump(v) .. ','
+		end
+		return s .. '} '
+	else
+		return tostring(o)
+	end
+end
 local once = require("gojo_src.core.once_manager")
 ---@param player EntityPlayer
 function Test(_, player)
