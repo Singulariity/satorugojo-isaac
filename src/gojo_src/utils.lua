@@ -52,4 +52,22 @@ function Utils:copyTable(tab)
 	return newTable
 end
 
+---adds second table into first table
+---@param first table
+---@param second table
+function Utils:mergeTables(first, second)
+    for k,v in pairs(second) do
+        if type(v) == "table" then
+            if type(first[k] or false) == "table" then
+                Utils:mergeTables(first[k] or {}, second[k] or {})
+            else
+                first[k] = v
+            end
+        else
+            first[k] = v
+        end
+    end
+    return first
+end
+
 return Utils
