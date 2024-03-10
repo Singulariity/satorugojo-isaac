@@ -209,30 +209,25 @@ end
 
 ---@param player EntityPlayer
 function Manager.postPlayerInit(player)
+	if Game():GetFrameCount() ~= 0 then return end
+
+	local pool = Game():GetItemPool()
+
+	--sadly I couldn't manage to handle mr. me & cursed deal interaction :P
+	if player:GetPlayerType() == enums.PLAYERS.GOJO.ID then
+		pool:RemoveCollectible(CollectibleType.COLLECTIBLE_MR_ME)
+	end
+
+	--todo remove this later
+	pool:RemoveCollectible(enums.ITEMS.SUKUNA_FINGER.ID)
+
 	for i, _ in pairs(enums.ITEMS) do
 		local item = enums.ITEMS[i]
 		if not Manager:isUnlocked(item.ID) then
-			Game():GetItemPool():RemoveCollectible(item.ID)
+			pool:RemoveCollectible(item.ID)
 		end
 	end
 end
 
---currently unused
----@param pickup EntityPickup
-function Manager.postPickupInit(pickup)
-	if true then return end
-	if pickup.Variant ~= PickupVariant.PICKUP_COLLECTIBLE then return end
-
-	local item = enums:getItemById(pickup.SubType)
-	if not item then return end
-
-	if not Manager:isUnlocked(pickup.SubType) then
-		local pool = Game():GetItemPool():GetPoolForRoom(Game():GetRoom():GetType(), Game():GetLevel():GetCurrentRoomDesc().SpawnSeed)
-		local target = Game():GetItemPool():GetCollectible(pool, true, pickup.InitSeed)
-		Game():GetItemPool():RemoveCollectible(pickup.SubType)
-
-		pickup:Morph(pickup.Type, pickup.Variant, target, true, true, true)
-	end
-end
 
 return Manager

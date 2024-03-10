@@ -1,6 +1,4 @@
 local enums = require("gojo_src.core.enums")
-local save = require("gojo_src.core.save_manager")
-local Utils = require("gojo_src.utils")
 
 local Limit = {}
 
@@ -21,14 +19,6 @@ function Limit.postPEffectUpdate(player)
 			end
 		end
 		::continue::
-	end
-end
-
----@param player EntityPlayer
----@param cacheFlag CacheFlag
-function Limit.evaluateCache(player, cacheFlag)
-	if player:HasCollectible(enums.ITEMS.LIMIT.ID) and not Utils:hasValue(save.Data.TransformationPickIDs, enums.ITEMS.LIMIT.ID) then
-		table.insert(save.Data.TransformationPickIDs, enums.ITEMS.LIMIT.ID)
 	end
 end
 

@@ -8,4 +8,7 @@
 	<sound name="Infinite Void">
 		<sample weight="1" path="infinite_void.wav" />
 	</sound>
+	<sound name="Cursed Heart Collect">
+		<sample weight="1" path="cursed_heart_collect.wav" />
+	</sound>
 </sounds>

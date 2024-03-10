@@ -25,23 +25,26 @@ local function DefaultData()
 		DomainTrigger = -1, --domain trigger frame
 		DomainActive = 0, --domain active for next x rooms
 		UseCounter = 0, --infinite void use counter
-		Birthright = false, --is birthright item picked up
-		TransformationPickIDs = {}, --table for storing picked up transformation item ids
+		Birthright = false, --is birthright picked up
+		CursedHearts = 0, --picked cursed heart count
+		SaveFrame = 0,
+		CursedDeals = {},
 		--permanent data does not reset with each run
 		PermanentData = {
 			Unlocks = {
 				--default gojo achievement data
-				[enums.PLAYERS.GOJO.Name] = Utils:copyTable(CompletionTemplate())
+				[enums.PLAYERS.GOJO.Name] = CompletionTemplate()
 			}
 		}
 	}
 end
 
 local SaveManager = {}
-local Data = Utils:copyTable(DefaultData())
+local Data = DefaultData()
 local modRef
 
 local function saveData()
+	Data.SaveFrame = Game():GetFrameCount()
 	modRef:SaveData(json.encode(Data))
 end
 
@@ -60,12 +63,12 @@ function SaveManager.postPlayerInit(player)
 		if continue then
 			_data = saved_data
 		else
-			_data = Utils:copyTable(DefaultData())
+			_data = DefaultData()
 
 			Utils:mergeTables(_data.PermanentData, saved_data.PermanentData)
 		end
 	else
-		_data = Utils:copyTable(DefaultData())
+		_data = DefaultData()
 	end
 
 	for k, v in pairs(_data) do

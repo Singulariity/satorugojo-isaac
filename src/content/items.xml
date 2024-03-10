@@ -18,4 +18,20 @@
 		quality="4"
 		id="2"
 		name="Limit" />
+	<passive
+		description="Imbued with a cursed technique"
+		cache="damage"
+		coins="1"
+		soulhearts="2"
+		gfx="inverted_spear_of_heaven.png"
+		quality="3"
+		id="3"
+		name="Inverted Spear of Heaven" />
+	<passive
+		description="Ugh"
+		cache="all"
+		gfx="sukuna_finger.png"
+		quality="2"
+		id="4"
+		name="Sukuna's Finger" />
 </items>

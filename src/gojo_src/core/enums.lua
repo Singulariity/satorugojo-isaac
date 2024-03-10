@@ -91,16 +91,38 @@ ENUMS.PLAYERS = {
 ENUMS.SOUNDS = {
 	DOMAIN_EXPANSION = Isaac.GetSoundIdByName("Domain Expansion"),
 	GOJO_BIRTHRIGHT = Isaac.GetSoundIdByName("Gojo Birthright"),
-	INFINITE_VOID = Isaac.GetSoundIdByName("Infinite Void")
+	INFINITE_VOID = Isaac.GetSoundIdByName("Infinite Void"),
+	CURSED_HEART_COLLECT = Isaac.GetSoundIdByName("Cursed Heart Collect")
 }
 
 ENUMS.ITEMS = {
 	INFINITE_VOID = Item("Infinite Void", ENUMS.PLAYERS.GOJO, ENUMS.COMPLETION.Delirium, false, "achievement_infinite_void.png"),
-	LIMIT = Item("Limit", ENUMS.PLAYERS.GOJO, ENUMS.COMPLETION.MomsHeart, false, "achievement_limit.png")
+	LIMIT = Item("Limit", ENUMS.PLAYERS.GOJO, ENUMS.COMPLETION.MomsHeart, false, "achievement_limit.png"),
+	INVERTED_SPEAR_OF_HEAVEN = Item("Inverted Spear of Heaven", ENUMS.PLAYERS.GOJO, ENUMS.COMPLETION.Isaac, false, "achievement_inverted_spear_of_heaven.png"),
+	SUKUNA_FINGER = DefaultItem("Sukuna's Finger"),
+	--SUKUNA_FINGER = Item("Sukuna's Finger", ENUMS.PLAYERS.GOJO, ENUMS.COMPLETION.Satan, false, "achievement_sukuna_finger.png")
+}
+
+ENUMS.ENTITY = {
+	CURSED_HEART = {
+		ENTITY_TYPE = Isaac.GetEntityTypeByName("Cursed Heart"),
+		VARIANT = Isaac.GetEntityVariantByName("Cursed Heart"),
+		SUBTYPE = 107
+	},
+	CURSED_HEART_HALF = {
+		ENTITY_TYPE = Isaac.GetEntityTypeByName("Cursed Heart (half)"),
+		VARIANT = Isaac.GetEntityVariantByName("Cursed Heart (half)"),
+		SUBTYPE = 108
+	},
+	CURSED_DEAL = {
+		ENTITY_TYPE = Isaac.GetEntityTypeByName("Cursed Deal"),
+		VARIANT = Isaac.GetEntityVariantByName("Cursed Deal"),
+	}
 }
 
 ENUMS.COSTUMES = {
-	GOJO_HAIR = Isaac.GetCostumeIdByPath("gfx/characters/gojo_hair.anm2")
+	GOJO_HAIR = Isaac.GetCostumeIdByPath("gfx/characters/gojo_hair.anm2"),
+	GOJO_BODY = Isaac.GetCostumeIdByPath("gfx/characters/gojo_body.anm2")
 }
 
 return ENUMS

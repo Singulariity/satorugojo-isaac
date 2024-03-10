@@ -1,6 +1,10 @@
 <ItemPools>
-    <Pool Name="treasure">
-        <Item Name="Infinite Void" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
-        <Item Name="Limit" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
-    </Pool>
+	<Pool Name="treasure">
+		<Item Name="Infinite Void" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+		<Item Name="Limit" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+		<Item Name="Sukuna's Finger" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+	<Pool Name="angel">
+		<Item Name="Inverted Spear of Heaven" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
 </ItemPools>

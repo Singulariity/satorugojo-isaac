@@ -10,9 +10,12 @@ local postNewLevel = require("gojo_src.callbacks.post_new_level")
 local postNewRoom = require("gojo_src.callbacks.post_new_room")
 local postPickupInit = require("gojo_src.callbacks.post_pickup_init")
 local postPlayerInit = require("gojo_src.callbacks.post_player_init")
+local postRender = require("gojo_src.callbacks.post_render")
 local postPEffectUpdate = require("gojo_src.callbacks.post_peffect_update")
 local postUpdate = require("gojo_src.callbacks.post_update")
 local preGameExit = require("gojo_src.callbacks.pre_game_exit")
+local prePickupCollision = require("gojo_src.callbacks.pre_pickup_collision")
+local preUseItem = require("gojo_src.callbacks.pre_use_item")
 local useItem = require("gojo_src.callbacks.use_item")
 
 GojoMod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, evaluateCache)
@@ -20,9 +23,12 @@ GojoMod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, postNewLevel)
 GojoMod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, postNewRoom)
 GojoMod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, postPickupInit)
 GojoMod:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, postPlayerInit)
+GojoMod:AddCallback(ModCallbacks.MC_POST_RENDER, postRender)
 GojoMod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, postPEffectUpdate)
 GojoMod:AddCallback(ModCallbacks.MC_POST_UPDATE, postUpdate)
 GojoMod:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, preGameExit)
+GojoMod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, prePickupCollision)
+GojoMod:AddCallback(ModCallbacks.MC_PRE_USE_ITEM, preUseItem)
 GojoMod:AddCallback(ModCallbacks.MC_USE_ITEM, useItem)
 
 
@@ -36,18 +42,6 @@ eid:UpdateEID()
 
 
 --test
-local function Dump(o)
-	if type(o) == 'table' then
-		local s = '{ '
-		for k,v in pairs(o) do
-			if type(k) ~= 'number' then k = '"'..k..'"' end
-			s = s .. '['..k..'] = ' .. Dump(v) .. ','
-		end
-		return s .. '} '
-	else
-		return tostring(o)
-	end
-end
 local once = require("gojo_src.core.once_manager")
 ---@param player EntityPlayer
 function Test(_, player)

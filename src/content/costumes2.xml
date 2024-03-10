@@ -1,3 +1,4 @@
 <costumes anm2root="gfx/characters/">
 	<costume anm2path="gojo_hair.anm2" type="none" priority="100" />
+	<costume anm2path="gojo_body.anm2" type="none" priority="100" />
 </costumes>
